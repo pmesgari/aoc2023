@@ -5,7 +5,8 @@ args = sys.argv
 
 def set_filepath():
     if len(args) < 2:
-        return "Missing filename arguments."
+        print("Missing filename argument.")
+        sys.exit(1)
     
     day = ''.join([c for c in args[0] if c.isdigit()])
     filename = args[1]
