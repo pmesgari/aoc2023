@@ -8,7 +8,8 @@ def set_filepath():
         print("Missing filename argument.")
         sys.exit(1)
     
-    day = ''.join([c for c in args[0] if c.isdigit()])
+    
+    day = ''.join([c for c in args[0][args[0].find('day'):] if c.isdigit()])
     filename = args[1]
 
     cli_dir = os.path.dirname(os.path.abspath(__file__))
