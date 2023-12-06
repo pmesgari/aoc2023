@@ -18,20 +18,20 @@ def count_winning_numbers(card):
 # print(count_winning_numbers(1))
 
 
-path = []
+collecion = []
 def collect(card):
     wining_numbers = count_winning_numbers(card)
     if wining_numbers == 0:
-        path.append(card + 1)
+        collecion.append(card + 1)
         return
     
-    path.append(card + 1)
+    collecion.append(card + 1)
     for i in range(1, wining_numbers + 1):
         collect(card + i)
 
 for c in range(len(cards)):
     collect(c)
     
-print(len(path))
+print(len(collecion))
 # print(path)
 # print(collect(0))

@@ -1,5 +1,3 @@
-from typing import List
-from collections import defaultdict, Counter
 from cli import filepath
 
 
@@ -70,12 +68,11 @@ def scan(row: int):
                 if j >= len(line):
                     break
             if found:
-                # print(i, j)
                 for s in star_symbols:
                     if s not in stars:
                         stars[s] = set()
                     stars[s].add((row, (i, j)))
-                result.append(int(''.join(line[i:j])))
+                result.append(range_to_number(line, (i, j)))
             i = j
         i += 1
     return result
@@ -84,8 +81,6 @@ def scan(row: int):
 # scan(grid[1], 1)
 # scan(grid[2], 2)
 # scan(grid[3], 3)
-
-
 
 def solve():
     part_numbers = []
