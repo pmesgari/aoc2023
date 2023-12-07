@@ -11,8 +11,13 @@ lines = [[re.split('\s+', line[0]), re.split('\s+', line[1])] for line in lines]
 cards = [line[0] for line in lines]
 wins = [line[1] for line in lines]
 
+memory = {}
 def count_winning_numbers(card):
-    return len(list(filter(None, [n in wins[card] for n in cards[card]])))
+    if card in memory:
+        return memory[card]
+    count = len(list(filter(None, [n in wins[card] for n in cards[card]])))
+    memory[card] = count
+    return count
 
 # print(count_winning_numbers(0))
 # print(count_winning_numbers(1))

@@ -12,7 +12,9 @@
             "console": "integratedTerminal",
             "justMyCode": true,
             "cwd": "${workspaceFolder}",
-            "args": ["sample1"]
+            "args": [
+                "sample1"
+            ]
         }
     ]
 }
