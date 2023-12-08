@@ -8,13 +8,24 @@ hands = [l.split(' ')[0] for l in lines]
 bids = [int(l.split(' ')[1]) for l in lines]
 
 # A, K, Q, J, T, 9, 8, 7, 6, 5, 4, 3, or 2
-labels = ['2', '3', '4', '5', '6', '7', '8', '9', 'T', 'J', 'Q', 'K', 'A']
+labels = ['J', '2', '3', '4', '5', '6', '7', '8', '9', 'T', 'Q', 'K', 'A']
 
-def transform(hand, bid):
+def transform(hand, bid, upgrade=False):
 	count = [0] * len(labels)
 	for c in hand:
 		count[labels.index(c)] += 1
-	return (sorted(count, reverse=True), hand, bid)
+	
+	if upgrade and 'J' in hand:
+		j_count = count[0]
+		max_count = count[1:].index(max(count[1:])) + 1
+		count[max_count] += j_count
+		count[0] = 0
+		if hand == 'JJJJJ':
+			sorted_count = [0] * len(labels)
+	sorted_count = sorted(count, reverse=True)
+	return (sorted_count, hand, bid)
+
+print(transform('KTJJT', 220, True))
 
 def compare(c, n):
 	if c[0] == n[0]:
@@ -37,8 +48,19 @@ def bubble_sort(arr, key=None):
 				arr[j + 1] = tmp
 	return arr
 
-counts = [transform(h, bids[idx]) for idx, h in enumerate(hands)]
+# counts = [transform(h, bids[idx]) for idx, h in enumerate(hands)]
+# bubble_sort(counts, key=compare)
+# ans = 0
+# for idx, sc in enumerate(counts):
+#     ans += ((idx + 1)* sc[2])
+
+# print(ans)
+
+# print(counts)
+counts = [transform(h, bids[idx], True) for idx, h in enumerate(hands)]
 bubble_sort(counts, key=compare)
+# print(counts)
+
 ans = 0
 for idx, sc in enumerate(counts):
     ans += ((idx + 1)* sc[2])
