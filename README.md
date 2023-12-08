@@ -94,7 +94,7 @@ The analytical solution is as follows:
 - The covered distance is: `distance = (t_max - t_hold) x V`. `t_max` is given to us, this is the value we have on the first line. `t_hold` is what we need to figure out.
 - From the problem description we are also told, the velocity of the boat will be equal to the amount of time we hold the button, so we can replace `V` with `t_hold` and we get: `distance = (t_max - t_hold) x t_hold`.
 
-![day06-1](../aoc2023/images/day06-1.png)
+![day06-1](./images/day06-1.png)
 - This will give us two roots, `th1` and `th2`. However, we need to be careful with these values. Because, the values are not always whole integers, and the rounding operation can affect the result, we always round down, so `(t_max - th)` will increase:
 
     - if `th1 < th2` then we need to ensure `th2` is still beating `d_max`.
