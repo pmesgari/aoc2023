@@ -11,7 +11,7 @@ Solutions to advent of code 2023 challenges
 
 ### Day 2
 
-- Initially I missed the remark about putting back the cubes after each set of game is played. 
+- Initially I missed the remark about putting back the cubes after each set of game is played.
 - Counters are handy for problems like this.
 
 ### Day 3
@@ -42,6 +42,8 @@ The interesting part here is that card number 5 is given to have no further card
 
 For my recursive algorithm, I start from a given card, then I count all its winning numbers, if there are no winning numbers then I add this card to my `collection` list and return. If there are winning numbers, then I first add the card I have now to my `collection` list, then for each winning number I start to collect their winning numbers.
 
+For part 2 at first I experienced a slow response. I was suspecting the recursive approach, however, it turned out the increase in response time was due to the `count_winning_numbers` method. It turns out applying `lis(filter(...))` is quite slow. So, I fixed it by keeping track of winning numbers for cards and instead of recalculating it everytime, look it up in the memory dict.
+
 ### Day 5
 
 Most challenging day so far, just because adminstering mathematically ranges is tedious and very error prone. Took me a long time to properly implement the logic to find the overlap and non-overlap segments between two ranges.
@@ -49,26 +51,26 @@ Most challenging day so far, just because adminstering mathematically ranges is 
 The main idea here is to take each `(seed, length)` pair and then apply each map to it. While applying a map, two things can happen:
 
 - The seed range overlaps with a given line of the map in one of these four cases:
-    - Inner `r1 <= s1 and s2 <= r2`
-    ```
-          s1--------s2
-       r1--------------r2
-    ```
-    - Left `r1 <= s1 < r2` (s1 is between r1 and r2)
-    ```
-          s1---------s2
-      r1----------r2
-    ```
-    - Right `r1 < s2 <= r2` (s2 is between r1 and r2)
-    ```
-       s1-----------s2
-            r1-----------r2
-    ```
-    - Outer `r1 <= s1 and r2 <= s2`
-    ```
-       s1-----------s2
-          r1-----r2
-    ```
+  - Inner `r1 <= s1 and s2 <= r2`
+  ```
+        s1--------s2
+     r1--------------r2
+  ```
+  - Left `r1 <= s1 < r2` (s1 is between r1 and r2)
+  ```
+        s1---------s2
+    r1----------r2
+  ```
+  - Right `r1 < s2 <= r2` (s2 is between r1 and r2)
+  ```
+     s1-----------s2
+          r1-----------r2
+  ```
+  - Outer `r1 <= s1 and r2 <= s2`
+  ```
+     s1-----------s2
+        r1-----r2
+  ```
 - There is no overlap with a given line of the map
 
 If there is an overlap, then I extract the overlapped part and find the non-overlapping part(s).
