@@ -82,3 +82,48 @@ If we are done processing a seed range against all the map lines and we didn't f
 - I initially spent a long time trying to apply a binary search algorithm but could not implement one. Since we are looking for a minimum, and that the input data is extremely large, made me think binary search could be applicable. But, I think because of the discontinous ranges, it is not possible to directly apply binary search.
 - When working with the seeds and the maps, I used for my seed ranges the format `(start, length)` and for the map lines `(destination, source, length)`. But working with `(start, length)` proved tedious, it made it complicated to pass around the ranges. So, best is to immediately work with applied seed ranges like this: `(start, start + length)`.
 - Also, took me again another while to figure out the order of the `if` statements in my `apply` function actually matters. A left overlap can be considered as a superset of an inner overlap. If we first check for a left overlap, we might mistakingly match an inner lap with a left one. Since the outcome of a left and inner overlap are different, everything will be messed up from that point onwards.
+
+### Day 6
+
+To start with I implemented a sliding window, using two pointers scanning the for the occurance of the first time that would give a distance bigger than max distance, and then extending the window until the distance got smaller than max. This worked for part 1, however didn't work for part 2. Sliding windows are expensive on large ranges.
+
+So, instead I resorted to finding an analytical solution that would allow me to find the first and last time points, the difference between the two would be the number of values which would allow us to beat the record.
+
+The analytical solution is as follows:
+
+- The covered distance is: `distance = (t_max - t_hold) x V`. `t_max` is given to us, this is the value we have on the first line. `t_hold` is what we need to figure out.
+- From the problem description we are also told, the velocity of the boat will be equal to the amount of time we hold the button, so we can replace `V` with `t_hold` and we get: `distance = (t_max - t_hold) x t_hold`.
+
+![day06-1](../aoc2023/images/day06-1.png)
+- This will give us two roots, `th1` and `th2`. However, we need to be careful with these values. Because, the values are not always whole integers, and the rounding operation can affect the result, we always round down, so `(t_max - th)` will increase:
+
+    - if `th1 < th2` then we need to ensure `th2` is still beating `d_max`.
+    - if `th1 > th2` then we need to ensure `th1` is still beating `d_max`,
+
+- We adjust the values of `th1` and `th2` accordingly. If they are too little to beat the record we just decrease them by 1 to get a bigger difference.
+
+- Finally, we just subtract `th2` from `th1` to find the count of the times that allows us to beat the record.
+
+### Day 7
+
+Interesting variation of poker game! The key here was to understand how sorting in Python is used for collection data types. The main idea is to transform the given hand into a collection of counts for each rank. Then rely on a sorting algorithm to compare the hands and sort them accordingly.
+
+Best is to look at this with an example. We have thirteen card ranks. I transform each hand into a list of length 13, with each item in the list holding the count of the cards for that rank:
+
+```
+32T3K -> [1, 2, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0]
+```
+
+I sorted this list to later use in comparing hands. I also decided to return a tuple in the form of `(sorted_count, hand, bid)` from the `transfer` method to have all the data in one place for easier computation.
+
+At first, I tried to utilize built-in sorting functions in Python, but in my algorithm I needed to receive two instances of the card at the same time to properly compare them. I am sure there is a way to do this, however, I resorted to writing a bubble search algorithm.
+
+Bubble search runs in `O(n^2)`, so I first wrote a generic one, checked it on a random list of the same size with the input, response time was quick enough, within 1-2 seconds.
+
+Then, I wrote a compare function that receives two cards and decides which one is stronger than the other. If the two cards are of the same rank then they will have the same count list. In that case, I check the hands in their original format. Compare the index of each character, if they are equal then continue, otherwise compare the indices and return.
+
+If, the cards are not of the same rank, then their count lists will be different. In that case, we don't need to check the hands themselves, we can just ask Python to compare the lists.
+
+For part 2, I changed my transformation so that if there is a joker in the hand, simply add its count to the card rank with the highest count. For example, if the hand is `KTJJT`, I count 2 jokers, then I add 2 to the maximum count of the list without including the jokers themselves. Finally, I set the joker counts to 0.
+
+Finally, when comparing cards of the same type, to account for the joker being worth nothing, I simply changed the order of the ranks in the `labels` list that I used to make the transformation and look up the indices of the cards.
