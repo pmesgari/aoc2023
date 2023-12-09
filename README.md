@@ -127,3 +127,19 @@ If, the cards are not of the same rank, then their count lists will be different
 For part 2, I changed my transformation so that if there is a joker in the hand, simply add its count to the card rank with the highest count. For example, if the hand is `KTJJT`, I count 2 jokers, then I add 2 to the maximum count of the list without including the jokers themselves. Finally, I set the joker counts to 0.
 
 Finally, when comparing cards of the same type, to account for the joker being worth nothing, I simply changed the order of the ranks in the `labels` list that I used to make the transformation and look up the indices of the cards.
+
+### Day 8
+
+At first this seemed like a graph and path finding problem. But, not quite!
+
+For part 1 I simply utilized a queue and starting from the source node I applied the commands to check if I ended up at a Z node. Given the size of the input this was easy and quick. I utilized the `mod` operator to create a cycle when going through the commands. It is important to remember inserting and popping from the queue from one side.
+
+For part 2, I knew applying all the commands to the input would be extremely a lot, nevertheless I naively tried and hoped my M2 MacBook would come back with a response, but after 30 minutes I gave up. I think the order magnitude is just astronomically high.
+
+So, after wrestling with the problem a bit, I realized I can use my solution from part 1 and find the number of steps for each A node to reach a Z node. The maximum of the steps determines my period. Then I just need to cycle through with the given period as many times as possible until all the nodes end up at a Z node.
+
+Looking at the example from the problem description:
+
+![day08-01](./images/day08-01.png)
+
+To get the final answer, I find all the A-Nodes. Then for each I find the number of steps it takes to reach a Z-Node. Finally, I apply the `lcm` method from Python to find the least common multiple.
