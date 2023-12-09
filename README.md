@@ -143,3 +143,19 @@ Looking at the example from the problem description:
 ![day08-01](./images/day08-01.png)
 
 To get the final answer, I find all the A-Nodes. Then for each I find the number of steps it takes to reach a Z-Node. Finally, I apply the `lcm` method from Python to find the least common multiple.
+
+### Day 9
+
+Less spicy problem today. I looked for a way that I could generate the minimum values for the next line that would help me find the first or last history value.
+
+My algorithm is displayed below for each part.
+
+For part 1:
+
+![day09-01](./images/day09-01.png)
+
+For part 2:
+
+![day09-02](./images/day09-02.png)
+
+I think there is probably an easier way to find the first value instead of using the `reduce` method I have. For a moment I thought I could generate the first value by summing the first values of each `[...]` subrange and then subtracting it from the first value of the first lines `[...]` subrange, but that gave the wrong answer.

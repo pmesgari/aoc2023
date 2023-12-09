@@ -13,7 +13,7 @@
             "justMyCode": true,
             "cwd": "${workspaceFolder}",
             "args": [
-                "input"
+                "sample1"
             ]
         }
     ]
