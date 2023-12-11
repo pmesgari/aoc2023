@@ -159,3 +159,42 @@ For part 2:
 ![day09-02](./images/day09-02.png)
 
 I think there is probably an easier way to find the first value instead of using the `reduce` method I have. For a moment I thought I could generate the first value by summing the first values of each `[...]` subrange and then subtracting it from the first value of the first lines `[...]` subrange, but that gave the wrong answer.
+
+
+### Day 10
+
+What a day! Here is the main idea I implemented:
+
+- I immediately transformed the gibberish grid map to a human readable version using bounding box characters
+- I find the `(row, col)` of the `S` tile, as well as determine the type of connecter I can replace `S` with
+
+    - Finding the `S` tile is simply scanning the map
+    - For each neighbor of `S` I then check if that neighbor will have `S` as its neighbor. This is because `S` can have a neighbor in all 4 directions. But the neighbors of `S` will have neighbors depending on the part type they are. For example a vertical part will have neighbors on top and bottom only. The neighbors that have `S` in their own set of neighbors are the ones that are part of the main loop. I call this the `allowed` neighbors of `S`.
+    - To find the part I can replace the `S` with, I loop through all the parts, then I check which part will have all the `allowed` neighbors in its own set of neighbors. That part can then be replaced with `S`.
+
+#### Part 1
+
+- Once the tedious work above is done, I do a Breadth-First Search (BFS) to find the furthest point. We are told there is a loop, so starting from `S` we should be able to go in two directions. Both directions will reach the furthest point, because its a loop!
+- The directions that I can start exploring are given by the `allowed` items found previously. For each item, I perform the BFS and register the nodes and number of steps it took me to get there as well as their parents.
+- Each BFS search will give half of the loop, I put these halves together and form the main loop.
+
+    - To form the main loop, I check each node in my exploration and then I take the minimum of the steps. My understanding is that the furthest point is meant to be the geometrically furthest point, in that case taking the minimum is needed. See, the simple example below.
+
+    ![day10-01](./images/day10-01.png)
+
+- Once the main loop is known, I find the maximum of the steps in the main loop, and that's the furthest point.
+
+
+#### Part 2
+
+- After searching through ideas, I decided to take the approach of expanding the grid.
+- Once the grid is expanded, since I have the coordinates of the points along the main loop, I flood fill the entire grid.
+
+    - From the main loop points, I first build the actual main loop, in doing so, I replace everything that is not part of the main loop with `0`.
+    - Then I apply the flood fill by doing another BFS and preventing from ever touching any loop parts
+    - Then I replace each point I encountered during the flood fill with a `.`
+    - Whatever `0`s are remaining are the ones entrapped in the main loop, I simply scan the grid line by line and count them.
+
+As for the expansion of the grid, I actually wrote down an example by hand, like this:
+
+![day10-02](./images/day10-02.png)
