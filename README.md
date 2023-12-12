@@ -198,3 +198,20 @@ What a day! Here is the main idea I implemented:
 As for the expansion of the grid, I actually wrote down an example by hand, like this:
 
 ![day10-02](./images/day10-02.png)
+
+
+### Day 11
+
+This was a sudden drop in difficulty compared to day 10. Not much to say here, main points were:
+
+- I used Manhattan distance to calculate the distance between a pair of galaxies.
+- I didn't even try, but seemed like expanding the universe would be a waste and not even sure if it would work for part 2.
+- Instead of expanding, I keep track of the space gaps in the rows and columns. Given any galaxy coordinate in the format of `(row, col)` I then find out how many gaps are before the given `row` and how many gaps are before the given `col`. From there I calculate the expanded `(row, col)`.
+- To apply the expansion, the logic is simple but there is a off by one error if not careful:
+
+    - Each gap doubles in size actually means adding one line -> scale 1
+    - Each gap larger 10 times means adding 9 extra lines -> scale 10
+    - Each gap larger 100 time measn adding 99 extra lines -> scale 100
+
+- To determine the space gaps, I used two lists, one for the row gaps, another for the column gaps. Both lists are initialized with `True`. Then for each galaxy I have, I mark the `row, col` of the galaxy in the relevant list to `False`. Whatever remains `True` in the lists are the gaps. Then I simply use these lists to determine the expanded `(row, col)`. An expansion only matters if it occures before the given `row` or `col`.
+- I find the total number of expansions in each direction by simply calling `sum` on the gaps arrays. In Python `True` evaluates to `1` and `False` evaluates to `0`. The sum will give me the total number of gaps which I can then multiply by `(scale - 1)` to get the shift.
